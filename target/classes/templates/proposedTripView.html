@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Weather Data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    
+    <div th:if="${weatherData}">
+		<h1>Weather Data</h1>
+    <p th:utext="'Weather Description: ' + ${weatherData.getJSONArray('hourly').getJSONObject(0).getJSONArray('weatherDesc').getJSONObject(0).getString('value')}"></p>
+	</div>
+
+</body>
+</html>

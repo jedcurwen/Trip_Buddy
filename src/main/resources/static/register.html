@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Register</h1>
+<form action=/register method="post"onsubmit="return validateForm()">
+	<label for="username">Username</label>
+	<input type="text"name="username">
+	
+	<label for="password">Password</label>
+	<input type="password"name="password">
+	
+	<label for="passwordrpt">Password Repeat</label>
+	<input type="password"name="passwordrpt">
+	<span id="passwordError"style="color:red;"></span>
+	
+	<label for="email">Email</label>
+	<input type="email"name="email">
+	
+	<label for="email">Age</label>
+	<input type="number"name="age">
+	
+	<label for="gender">Gender</label>
+	<select name="gender">
+		<option value="Male">Male</option>
+		<option value="Female">Female</option>
+		<option value="Other">Other</option>
+		<option value="Prefer Not To Say">Prefer not to say</option>		
+	</select>
+	
+	<label for="city">City</label>
+	<input type="text"name="city">
+	
+	<button type="submit">Submit</button>
+</form>
+
+
+	<span id="signUpSuccess"style="color:green;"></span>
+<script>
+    function validateForm() {
+        var password = document.getElementsByName("password")[0].value;
+        var confirmPassword = document.getElementsByName("passwordrpt")[0].value;
+        var passwordError = document.getElementById("passwordError");
+        var signUp = document.getElementById("signUpSuccess");
+
+        if (password !== confirmPassword) {
+            passwordError.innerHTML = "Passwords don't match!";
+            return false; // Prevent form submission
+        } else {
+            signUp.innerHTML = "User has been added.";         
+            setTimeout(5000);
+            return true; 
+        }
+    }
+</script>
+</body>
+</html>

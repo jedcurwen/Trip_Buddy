@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>			
+<title>Interested Trips</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+	<script src="/js/scripts.js"></script>	
+	
+	<style>
+table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 10px;
+}
+
+th, td{
+   border: 1px solid black;
+   padding: 8px;
+   text-align: left;
+}
+button {	
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}		
+h1{
+	font-family: Arial, sans-serif;
+	margin-left: 40%;	
+}
+#exchangeRate{
+	padding: 10px;
+}
+.logOut{
+	padding-top: 0%;
+	background-color:brown;
+	margin: 15px;
+}
+
+</style>
+</head>
+<body>	  
+
+	<h1>Interested Trips</h1>   
+	<button class="button logOut"><a th:href="@{/account/logout}">Log Out</a></button>
+
+
+<div th:if="${error}">
+    <p style="color: black;font-family: Arial, sans-serif;font-size: larger;" th:text="${error}"></p>
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>Trip ID</th>
+			<th>Trip Date</th>
+			<th>Destination</th>
+			<th>Duration (Days)</th>			
+		</tr>
+	</thead>
+	<tbody style="width: auto;">
+    	<tr th:each="trip : ${trips}">
+        	<td th:text="${trip.tripId}"></td>
+        	<td th:text="${trip.TripDate}"></td>
+        	<td th:text="${trip.Trip_Destination}"></td>
+        	<td th:text="${trip.TripDuration}"></td>        		
+        	<form th:action="@{/interestedTrips/removeTrip}" method="post">
+			<td>
+                <input type="hidden" name="tripID" th:value="${trip.TripID}" />
+            </td>
+				<td><button>Delete Trip</button></td>
+			</form> 				
+			<form th:action="@{/interestedTrips/exchangeRate}"method="post">
+			<td>
+                <input type="hidden" name="tripID" th:value="${trip.TripID}" />
+            </td>
+				<td><button>Check Exchange Rates</button></td>
+			</form>    	       	
+    	</tr>
+	</tbody>
+</table>
+
+<div th:if="${exchangeRate}" id="exchangeRate">
+<form action="/interestedTrips/getexchangeRate" method="post">
+    <h1>Exchange Rate</h1> 
+    <p th:utext="'Trip ID: ' + ${tripID}"></p>
+    <input type="hidden" name="tripID" th:value="${tripID}">
+    <label for="sourceCurrency">Source Currency</label>
+	<select name="sourceCurrency"id="sourceCurrency">
+		<option value="USD">Dollar</option>
+		<option value="GBP">Pound</option>
+		<option value="EUR">Euro</option>
+		<option value="JPY">Yen</option>
+		<option value="SEK">Swedish Krona</option>
+		<option value="JPY">Japanese Yen</option>
+		<option value="AUD">Australian Dollar</option>
+		<option value="NZD">New Zealand Dollar</option>			
+	</select>
+	<label for="targetCurrency">Target Currency</label>
+	<select name="targetCurrency"id="targetCurrency">
+		<option value="USD">Dollar</option>
+		<option value="GBP">Pound</option>
+		<option value="EUR">Euro</option>
+		<option value="JPY">Yen</option>
+		<option value="SEK">Swedish Krona</option>
+		<option value="JPY">Japanese Yen</option>
+		<option value="AUD">Australian Dollar</option>
+		<option value="NZD">New Zealand Dollar</option>		
+	</select>
+    <button onclick="hideForm()">Cancel</button>  
+    <button type="submit">Get Rates</button>
+</form>  
+</div>
+<div th:if="${currencyRate}">
+    <p style="color: black;font-family: Arial, sans-serif;font-size: larger;" th:text="${currencyRate}"></p>
+</div>
+</body>
+</html>

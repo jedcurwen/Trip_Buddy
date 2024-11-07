@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>			
+<title>Manage Trips</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+	<script src="/js/scripts.js"></script>	
+</head>
+<body>	  
+<h1>Manage Your Trips</h1> 
+<style>
+table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 10px;
+}
+
+th, td{
+   border: 1px solid black;
+   padding: 8px;
+   text-align: left;
+}
+button {	
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}		
+h1{
+	font-family: Arial, sans-serif;
+	margin-left: 40%;	
+}
+
+</style>
+
+<table>
+	<thead>
+		<tr>
+			<th>Trip ID</th>
+			<th>Trip Date</th>
+			<th>Destination</th>
+			<th>Duration (Days)</th>
+			<th>Weather</th>
+			<th>User Interest</th>
+			<th>View Comments</th>
+		</tr>
+	</thead>
+	<tbody style="width: auto;">
+    	<tr th:each="trip : ${trips}">
+        	<td th:text="${trip.TripID}"></td>
+        	<td th:text="${trip.TripDate}"></td>
+        	<td th:text="${trip.TripDestination}"></td>
+        	<td th:text="${trip.TripDuration}"></td>
+        	<td th:text="${trip.TripWeather}"></td>
+			<td th:text="${trip.TripInterest}"></td>	      		       	
+        	<form th:action="@{/manageTrips/delete}" method="post">
+			<td>
+                <input type="hidden" name="tripID" th:value="${trip.TripID}" />
+            </td>
+				<td><button>Delete Trip</button></td>
+			</form>
+        	<form th:action="@{/makeChanges/show}"method="post">
+				<td>
+					<input type="hidden" name="tripID" th:value="${trip.TripID}" />
+				</td>
+				<td><button>Make Changes</button></td>
+			</form>       	
+			   <form th:action="@{/manageTrips/tripInterest}"method="post">
+				<td>
+					<input type="hidden" name="tripID" th:value="${trip.TripID}" />
+				</td>
+				<td><button>View Interested Users</button></td>
+			</form> 
+			
+			<form th:action="@{/manageTrips/viewComments}"method="post">
+				<td>
+					<input type="hidden" name="tripID" th:value="${trip.TripID}" />
+				</td>
+				<td><button>View Comments</button></td>
+			</form> 
+			
+			    
+    	</tr>
+	</tbody>
+</table>
+
+<div th:if="${interestedUsers}" id="interestedUsers">
+    <h1>Interested People</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Gender</th>
+                <th>Age</th>
+                <th>City</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="user : ${interestedUsers}">
+                <td th:utext="${user['Username']}"></td>
+                <td th:utext="${user['Gender']}"></td>
+                <td th:utext="${user['Age']}"></td>
+                <td th:utext="${user['City']}"></td>
+                <td>
+                    <!-- Accept Button -->
+                    <form th:action="@{/manageTrips/accept}" method="post">
+                        <input type="hidden" name="username" th:value="${user['Username']}"/>
+                        <button>Accept User</button>
+                    </form>
+
+                    <!-- Reject Button -->
+                    <form th:action="@{/manageTrips/reject}" method="post">
+                        <input type="hidden" name="username" th:value="${user['Username']}"/>
+                        <button>Reject User</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${viewComments}" id="viewComments">
+    <h1>Comments</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Comment</th>
+                <th>Comment Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="comment : ${viewComments}">
+                <td th:text="${comment['CommentedUser']}"></td>
+                <td th:text="${comment['Comment']}"></td>
+                <td th:text="${comment['CommentDate']}"></td>                
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div th:if="${error}">
+    <p style="color: red;" th:text="${error}">No trips found.</p>
+</div>
+</body>
+</html>

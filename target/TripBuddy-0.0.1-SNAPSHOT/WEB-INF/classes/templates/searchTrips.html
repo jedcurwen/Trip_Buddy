@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>Trips</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css">
+	<script src="/js/scripts.js"></script>
+	
+	<style>
+table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 10px;
+}
+
+th, td{
+   border: 1px solid black;
+   padding: 8px;
+   text-align: left;
+}
+button {	
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}		
+h1{
+	font-family: Arial, sans-serif;
+	margin-left: 40%;	
+}
+.logOut{
+	padding-top: 0%;
+	background-color:brown;
+	margin: 15px;
+}
+</style>
+</head>
+
+
+	<h1>View our Current Trips </h1>  
+	<button class="button logOut"><a th:href="@{/account/logout}">Log Out</a></button>
+
+
+
+
+
+<div th:if="${trip}">
+    <p style="color: green;" th:text="${trip}"></p>
+</div>
+
+<table>
+	<thead>
+		<tr>
+			<th>Trip ID</th>
+			<th>Trip Date</th>
+			<th>Destination</th>
+			<th>Duration (Days)</th>
+			<th>Weather</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+<tbody style="width: auto;">
+    <tr th:each="trip, status : ${trips}">
+        <form th:action="@{/searchTrips/registerInterest}" method="post">
+            <td th:text="${trip.TripID}"></td>
+            <td th:text="${trip.TripDate}"></td>
+            <td th:text="${trip.TripDestination}"></td>
+            <td th:text="${trip.TripDuration}"></td>
+            <td th:text="${trip.TripWeather}"></td>
+            <td>
+                <input type="hidden" name="tripID" th:value="${trip.TripID}" />
+                <input type="hidden" name="tripDate" th:value="${trip.TripDate}" />
+                <input type="hidden" name="tripDestination" th:value="${trip.TripDestination}" />
+                <input type="hidden" name="tripDuration" th:value="${trip.TripDuration}" />
+                <input type="hidden" name="tripWeather" th:value="${trip.TripWeather}" />
+                <button>Im Interested</button>
+            
+            </td>       
+        </form>
+        
+        <td>
+			<button onclick="showComment()">Leave a Comment.</button>
+		</td>
+		<form th:action="@{/searchTrips/newComment}" method="post">
+			 <input type="hidden" name="tripID" th:value="${trip.TripID}" />
+   			 <textarea id="comment" name="comment" style="display: none;"></textarea>
+    		<td>
+       		 <button id="commButton" style="display: none;">Leave Comment</button>
+    		</td>
+		</form>
+    </tr>
+</tbody>
+
+</table>
+
+<div th:if="${error}">
+    <p style="color: red;" th:text="${error}"></p>
+</div>
+
+
+<body>	
+	
+</body>
+
+
+
+
+
+
+
+</html>

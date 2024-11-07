@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>Create Trip!</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+	<script src="/js/scripts.js"></script>		
+</head>
+<body>	
+<div id="welcomeHead">
+	<h1>Create Trip</h1>
+</div>
+	
+<form action="/show" method="post">
+    <label for="location">Location</label>
+    <input type="text" name="location" required>
+    <label for="date">Trip Date</label>
+    <input type="date" name="date" required>
+    <label for="duration">Duration</label>
+    <input type="number" name="duration" placeholder="Enter the duration in days." required>
+    <input type="hidden" name="tripID">
+    <button type="submit">Submit</button>
+</form>
+    
+<div th:if="${weatherData}" id="weatherData">
+<form action="/newTrip" method="post">
+    <h1>Trip</h1> 
+    <p th:utext="'Trip ID: ' + ${tripID}"></p>
+    <p th:utext="'Date: ' + ${date}"></p>      
+    <p th:utext="'Location: ' + ${location}"></p>
+    <p th:utext="'Weather Description: ' + ${weatherData.getJSONArray('hourly').getJSONObject(0).getJSONArray('weatherDesc').getJSONObject(0).getString('value')}"></p>
+    <p th:utext="'Temperature: ' + ${temperature} + '°C'"></p> 
+    <p th:utext="'Duration: ' + ${duration}"></p>
+    <input type="hidden" name="tripID" th:value="${tripID}">
+    <input type="hidden" name="date" th:value="${date}">
+    <input type="hidden" name="location" th:value="${location}">
+    <input type="hidden" name="weatherDescription" th:value="${weatherData.getJSONArray('hourly').getJSONObject(0).getJSONArray('weatherDesc').getJSONObject(0).getString('value')}">
+    <input type="hidden" name="temperature" th:value="${temperature}">
+    <input type="hidden" name="duration" th:value="${duration}"> 
+    <button type="button" onclick="MyFunction()">Cancel</button>  
+    <button type="submit">Create Trip</button>
+</form>  
+</div>
+
+<div th:if="${tripCreated}">
+    <p style="color: green;" th:text="${tripCreated}"></p>
+</div>
+
+</body>
+</html>
